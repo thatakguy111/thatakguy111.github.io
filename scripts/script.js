@@ -1,38 +1,38 @@
 gsap.registerPlugin(EasePack)
 gsap.registerPlugin(ScrollTrigger)
-import {SplitText} from './splitText.js'
+import { SplitText } from './splitText.js'
 
-function InitFlickerWords(cls, dur){
+function InitFlickerWords(cls, dur) {
     let text = new SplitText(cls);
     let flickerEase = "rough({ template: circ.easeOut, strength: 4, points: 50, taper: 'out', randomize: true, clamp:  true})";
-    gsap.from(text.words,{
-        autoAlpha:0,
-        duration:dur,
-        stagger:{each:0.01, from:"random"},
+    gsap.from(text.words, {
+        autoAlpha: 0,
+        duration: dur,
+        stagger: { each: 0.01, from: "random" },
         ease: flickerEase,
     });
 }
 
-function InitFlickerChar(cls, dur){
+function InitFlickerChar(cls, dur) {
     let text = new SplitText(cls);
     let flickerEase = "rough({ template: circ.easeOut, strength: 4, points: 50, taper: 'out', randomize: true, clamp:  true})";
-    gsap.from(text.chars,{
-        autoAlpha:0,
-        duration:dur,
-        stagger:{each:0.01, from:"random"},
+    gsap.from(text.chars, {
+        autoAlpha: 0,
+        duration: dur,
+        stagger: { each: 0.01, from: "random" },
         ease: flickerEase
     });
 }
 
-function InitFlickerInfinite(cls, dur){
+function InitFlickerInfinite(cls, dur) {
     let text = new SplitText(cls);
     let flickerEase = "rough({ template: circ.easeOut, strength: 4, points: 50, taper: 'out', randomize: true, clamp:  true})";
-    gsap.from(text.words,{
-        autoAlpha:0,
-        duration:dur,
-        stagger:{each:0.01, from:"random"},
+    gsap.from(text.words, {
+        autoAlpha: 0,
+        duration: dur,
+        stagger: { each: 0.01, from: "random" },
         ease: flickerEase,
-        repeat:-1
+        repeat: -1
     });
 }
 
@@ -299,14 +299,14 @@ function initMenu() {
     btn.addEventListener('click', initMenuButton);
 }
 
-function InitProfile(){
+function InitProfile() {
     const profile = document.querySelector('.profile');
     const el = profile.querySelector('.desc');
 
-    gsap.to(el,{
-        opacity:1,
-        duration:1,
-        ease: "elastic.inOut(1,0.3)", 
+    gsap.to(el, {
+        opacity: 1,
+        duration: 1,
+        ease: "elastic.inOut(1,0.3)",
     });
 
 }
@@ -373,4 +373,4 @@ window.onload = function () {
 
 initMagneticButtons();
 initMenu();
-InitFlickerWords('.desc',1);
+InitFlickerWords('.desc', 1);
