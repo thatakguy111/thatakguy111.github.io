@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Gradient Patterns</title>
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0d0d0d;
+            overflow: hidden;
+        }
+
+        .pattern {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            animation: changeBackground 10s infinite alternate;
+        }
+
+        .pattern::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(13, 13, 13, 0.8), rgba(13, 13, 13, 0.6), rgba(13, 13, 13, 0.4), rgba(13, 13, 13, 0.2));
+            animation: animatePattern 20s linear infinite;
+        }
+
+        @keyframes animatePattern {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(50%, 50%) rotate(360deg);
+            }
+        }
+
+        @keyframes changeBackground {
+            0% {
+                background: #0d0d0d;
+            }
+
+            50% {
+                background: #1a1a1a;
+            }
+
+            100% {
+                background: #333333;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="pattern"></div>
+</body>
+
+</html>

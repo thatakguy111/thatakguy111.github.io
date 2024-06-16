@@ -1,0 +1,153 @@
+.intro-1 {
+    position: absolute;
+    z-index: 99;
+    width: 25%;
+    height: 100dvh;
+    background-color: #141517;
+    top: 0;
+    left: 0;
+    border-right: solid rgba(0, 0, 0, 0.075) 2px;}
+
+.intro-2 {
+    position: absolute;
+    z-index: 99;
+    width: 25%;
+    height: 100dvh;
+    background-color: #141517;
+    top: 0;
+    left: 25%;
+    border-right: solid rgba(0, 0, 0, 0.075) 2px;
+}
+
+.intro-3 {
+    position: absolute;
+    z-index: 99;
+    width: 25%;
+    height: 100dvh;
+    background-color: #141517;
+    top: 0;
+    left: 50%;
+    border-right: solid rgba(0, 0, 0, 0.075) 2px;
+}
+
+.intro-4 {
+    position: absolute;
+    z-index: 99;
+    width: 25%;
+    height: 100dvh;
+    background-color: #141517;
+    top: 0;
+    left: 75%;
+    border-right: solid rgba(0, 0, 0, 0.075) 2px;
+}
+
+.intro-1.active {
+    display: none;
+    animation-name: intro;
+    animation-duration: 0.7s;
+}
+
+.intro-2.active {
+    display: none;
+    animation-name: intro;
+    animation-duration: 0.7s;
+}
+
+.intro-3.active {
+    display: none;
+    animation-name: intro;
+    animation-duration: 0.7s;
+}
+
+.intro-4.active {
+    display: none;
+    animation-name: intro;
+    animation-duration: 0.7s;
+}
+
+@keyframes intro {
+    0% {
+        height: 100vh;
+        display: block;
+    }
+
+    100% {
+        height: 0;
+        display: none;
+    }
+}
+/* .cover-1 {
+    position: absolute;
+    z-index: 98;
+    width: 25%;
+    height: 100dvh;
+    background-color: rgb(26, 21, 21);
+    top: 0;
+    left: 0;
+}
+
+.cover-2 {
+    position: absolute;
+    z-index: 98;
+    width: 25%;
+    height: 100dvh;
+    background-color: rgb(26, 21, 21);
+    top: 0;
+    left: 25%;
+}
+
+.cover-3 {
+    position: absolute;
+    z-index: 98;
+    width: 25%;
+    height: 100dvh;
+    background-color: rgb(26, 21, 21);
+    top: 0;
+    left: 50%;
+}
+
+.cover-4 {
+    position: absolute;
+    z-index: 98;
+    width: 25%;
+    height: 100dvh;
+    background-color: rgb(26, 21, 21);
+    top: 0;
+    left: 75%;
+}
+
+.cover-1.active {
+    display: none;
+    animation-name: intro;
+    animation-duration: 0.8s;
+}
+
+.cover-2.active {
+    display: none;
+    animation-name: intro;
+    animation-duration: 0.8s;
+}
+
+.cover-3.active {
+    display: none;
+    animation-name: intro;
+    animation-duration: 0.8s;
+}
+
+.cover-4.active {
+    display: none;
+    animation-name: intro;
+    animation-duration: 0.8s;
+} */
+
+@keyframes intro {
+    0% {
+        height: 100vh;
+        display: block;
+    }
+
+    100% {
+        height: 0;
+        display: none;
+    }
+}
