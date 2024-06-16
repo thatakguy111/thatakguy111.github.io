@@ -1,16 +1,39 @@
-import { SplitText } from "./splitText";
-gsap.registerPlugin(ScrollTrigger)
 gsap.registerPlugin(EasePack)
+gsap.registerPlugin(ScrollTrigger)
+import {SplitText} from './splitText.js'
 
-function InitFlicker(cls){
+function InitFlickerWords(cls, dur){
     let text = new SplitText(cls);
     let flickerEase = "rough({ template: circ.easeOut, strength: 4, points: 50, taper: 'out', randomize: true, clamp:  true})";
-    gsap.timeline().from(text.words,{
+    gsap.from(text.words,{
         autoAlpha:0,
-        duration:1,
-        stagger:{each:0.05, from:"random"},
+        duration:dur,
+        stagger:{each:0.01, from:"random"},
+        ease: flickerEase,
+    });
+}
+
+function InitFlickerChar(cls, dur){
+    let text = new SplitText(cls);
+    let flickerEase = "rough({ template: circ.easeOut, strength: 4, points: 50, taper: 'out', randomize: true, clamp:  true})";
+    gsap.from(text.chars,{
+        autoAlpha:0,
+        duration:dur,
+        stagger:{each:0.01, from:"random"},
         ease: flickerEase
-    },0.3);
+    });
+}
+
+function InitFlickerInfinite(cls, dur){
+    let text = new SplitText(cls);
+    let flickerEase = "rough({ template: circ.easeOut, strength: 4, points: 50, taper: 'out', randomize: true, clamp:  true})";
+    gsap.from(text.words,{
+        autoAlpha:0,
+        duration:dur,
+        stagger:{each:0.01, from:"random"},
+        ease: flickerEase,
+        repeat:-1
+    });
 }
 
 function isInView(element) {
@@ -72,7 +95,6 @@ function initMagneticButtons() {
         // Mouse Reset
         magnets.forEach((magnet) => {
             magnet.addEventListener('mousemove', moveMagnet);
-            $(this.parentNode).removeClass('not-active');
             magnet.addEventListener('mouseleave', function (event) {
                 gsap.to(event.currentTarget, 1.5, {
                     x: 0,
@@ -350,6 +372,5 @@ window.onload = function () {
 // CALL FUNCTIONS
 
 initMagneticButtons();
-// starfield();
 initMenu();
-InitFlicker('.desc');
+InitFlickerWords('.desc',1);

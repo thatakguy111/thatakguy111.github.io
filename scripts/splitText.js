@@ -1,9 +1,5 @@
 "use strict";
 
-// // coded by: Ayhanexe with <3
-// // I do not care about money
-// // This code is fully free
-// // use it as you want ;)
 export class SplitText {
   #options = {
     charClass: "aki__char",
@@ -18,51 +14,38 @@ export class SplitText {
   #rawWords = [];
   words = [];
   lines = [];
+  target = null;
+  textContent = null;
 
   constructor(elementOrSelector) {
     this.init(elementOrSelector);
-
-    this.target = null;
-    this.textContent = null;
   }
 
   #isElement(obj) {
-    try {
-      return obj instanceof HTMLElement;
-    } catch (e) {
-      return (
-        typeof obj === "object" &&
-        obj.nodeType === 1 &&
-        typeof obj.style === "object" &&
-        typeof obj.ownerDocument === "object"
-      );
-    }
+    return obj instanceof HTMLElement;
   }
 
   #createElement(tagname, content = "", htmlAttributes = {}, ...cssClass) {
-    const __element__ = document.createElement(tagname);
-    __element__.classList.add(...cssClass);
-    __element__.innerHTML = content;
+    const element = document.createElement(tagname);
+    element.classList.add(...cssClass);
+    element.innerHTML = content;
 
     for (const [key, value] of Object.entries(htmlAttributes)) {
-      __element__.setAttribute(key, value);
+      element.setAttribute(key, value);
     }
 
-    return __element__;
+    return element;
   }
 
   #splitChars() {
-    const textChars = `${this.textContent}`.split("");
+    const textChars = [...this.textContent];
 
     textChars.forEach((char) => {
       const charElement = this.#createElement(
-        "div",
-        `${char}`,
-        {
-          style: "position:relative; display:inline-block;",
-        },
-        `${this.#options.globalClass}`,
-        `${this.#options.charClass}`
+        "span",
+        char,
+        {},
+        this.#options.charClass
       );
 
       this.#rawChars.push(char === " " ? " " : charElement);
@@ -75,75 +58,65 @@ export class SplitText {
     let startIndex = 0;
     this.#rawChars.forEach((rawChar, index) => {
       if (rawChar === " ") {
-        const wordArray = this.#rawChars
-          .slice(startIndex, index)
-          .filter((word) => word !== " ");
+        const wordArray = this.#rawChars.slice(startIndex, index).filter((char) => char !== " ");
 
-        const wordDiv = this.#createElement(
-          "div",
+        const wordSpan = this.#createElement(
+          "span",
           "",
-          {
-            style: "position:relative; display:inline-block;",
-          },
-          `${this.#options.globalClass}`,
-          `${this.#options.wordClass}`
+          {},
+          this.#options.wordClass
         );
 
-        wordArray.forEach((word) => {
-          wordDiv.append(word);
-        });
+        wordArray.forEach((char) => wordSpan.append(char));
 
-        this.words.push(wordDiv);
-        this.#rawWords.push(wordDiv, " ");
-        startIndex = index;
+        this.words.push(wordSpan);
+        this.#rawWords.push(wordSpan, " ");
+        startIndex = index + 1;
       }
     });
   }
 
   #splitLines() {
+    const lineArrays = [];
     let startIndex = 0;
-    let lineArrays = [];
 
-    const appendToLineArray = () => {
-
-      lineArrays.forEach((lineArray) => {
-        const lineDiv = this.#createElement(
-          "div",
-          "",
-          {
-            style: "position:relative; display:inline-block",
-          },
-          `${this.#options.globalClass}`,
-          `${this.#options.lineClass}`
-        );
-        
-        lineArray.forEach(lineWord => {
-          lineDiv.append(lineWord)
-          lineDiv.append(" ")
-        })
-        this.lines.push(lineDiv);
-        this.target.append(lineDiv);
-      });
-    };
-
-    this.words.reduce((oldOffsetTop, word, index) => {
+    this.words.reduce((prevOffsetTop, word, index) => {
       const currentOffsetTop = word.offsetTop;
-      
-      if (
-        (oldOffsetTop !== currentOffsetTop && oldOffsetTop !== null) ||
-        index === this.words.length - 1
-      ) {
-        const computedIndex =
-          index === this.words.length - 1 ? index + 1 : index;
-        const lineArray = this.words.slice(startIndex, computedIndex);
+
+      if (prevOffsetTop !== currentOffsetTop && prevOffsetTop !== null) {
+        const lineArray = this.words.slice(startIndex, index);
         lineArrays.push(lineArray);
         startIndex = index;
       }
 
+      if (index === this.words.length - 1) {
+        const lineArray = this.words.slice(startIndex, index + 1);
+        lineArrays.push(lineArray);
+      }
+
       return currentOffsetTop;
     }, null);
-    
-    appendToLineArray();
+
+    this.#appendLines(lineArrays);
+  }
+
+  #appendLines(lineArrays) {
+    lineArrays.forEach((lineArray) => {
+      const lineSpan = this.#createElement(
+        "span",
+        "",
+        {},
+        this.#options.lineClass
+      );
+
+      lineArray.forEach((word) => {
+        lineSpan.append(word);
+        lineSpan.append(" ");
+      });
+
+      this.lines.push(lineSpan);
+      this.target.append(lineSpan);
+    });
   }
 
   #combineAll() {
@@ -169,16 +142,12 @@ export class SplitText {
   }
 
   #logError(message) {
-    console.error(`${message}`, "color:red", "color:inherit");
+    console.error(message);
   }
 
   #logAndThrowError(message) {
-    if (message.includes("%c")) {
-      console.error(`${message}`, "color:red", "color:inherit");
-    } else {
-      console.error(`${message}`);
-    }
-    throw "SplitTextException! ⬆️";
+    this.#logError(message);
+    throw new Error("SplitTextException: " + message);
   }
 
   init(elementOrSelector) {
@@ -186,21 +155,12 @@ export class SplitText {
       this.target = elementOrSelector;
       this.#getTextContent();
     } else {
-      if (elementOrSelector !== "") {
-        const element = document.querySelector(`${elementOrSelector}`);
-        if (element) {
-          this.target = element;
-          this.#getTextContent();
-          // window.addEventListener("resize", () => resizeFunction(element))
-        } else {
-          this.#logAndThrowError(
-            `can't found %c${elementOrSelector}%c in DOM tree!`
-          );
-        }
+      const element = document.querySelector(elementOrSelector);
+      if (element) {
+        this.target = element;
+        this.#getTextContent();
       } else {
-        this.#logAndThrowError(
-          `selector is empty! %cplease give a valid%c selector!`
-        );
+        this.#logAndThrowError(`Cannot find element with selector "${elementOrSelector}" in DOM tree!`);
       }
     }
 
