@@ -49,39 +49,38 @@ function isInView(element) {
 
 // TEXT DECODER EFFECT
 
-function text_decode_effect(tag) {
+// function text_decode_effect(tag) {
 
-    let elements = document.querySelectorAll(tag);
-    Array.prototype.forEach.call(elements, function (element) {
-        let decoding = false; // flag to track execution state
+//     let elements = document.querySelectorAll(tag);
+//     Array.prototype.forEach.call(elements, function (element) {
+//         let decoding = false; // flag to track execution state
 
-        function decodeText() {
-            if (decoding) return; // exit if already decoding
-            decoding = true;
+//         function decodeText() {
+//             if (decoding) return; // exit if already decoding
+//             decoding = true;
+//             let t = element;
+//             let str = t.innerHTML;
+//             const ascii = "⏃⏚☊⎅⟒⎎☌⊑⟟⟊☍⌰⋔⋏⍜⌿⍾⍀⌇⏁⎍⎐⍙⌖⊬⋉"; let arr = str.split("");
+//             let newStr = "";
 
-            let t = element;
-            let str = t.innerHTML;
-            const ascii = "⏃⏚☊⎅⟒⎎☌⊑⟟⟊☍⌰⋔⋏⍜⌿⍾⍀⌇⏁⎍⎐⍙⌖⊬⋉"; let arr = str.split("");
-            let newStr = "";
+//             setTimeout(function () {
+//                 for (let i = 0; i < arr.length; i++) {
+//                     let randomChar = ascii[Math.floor(Math.random() * ascii.length)];
+//                     newStr += randomChar;
+//                     t.innerHTML = newStr;
+//                     setTimeout(function () {
+//                         newStr = newStr.substring(0, i) + arr[i] + newStr.substring(i + 1);
+//                         t.innerHTML = newStr;
+//                         if (i === arr.length - 1) decoding = false; // reset flag when done
+//                     }, 90 * i);
+//                 }
+//             }, 100);
+//         }
+//         element.addEventListener('mouseover', decodeText);
 
-            setTimeout(function () {
-                for (let i = 0; i < arr.length; i++) {
-                    let randomChar = ascii[Math.floor(Math.random() * ascii.length)];
-                    newStr += randomChar;
-                    t.innerHTML = newStr;
-                    setTimeout(function () {
-                        newStr = newStr.substring(0, i) + arr[i] + newStr.substring(i + 1);
-                        t.innerHTML = newStr;
-                        if (i === arr.length - 1) decoding = false; // reset flag when done
-                    }, 90 * i);
-                }
-            }, 100);
-        }
-        element.addEventListener('mouseover', decodeText);
+//     });
 
-    });
-
-}
+// }
 
 function initMagneticButtons() {
 
