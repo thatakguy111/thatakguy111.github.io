@@ -3,25 +3,29 @@ gsap.registerPlugin(ScrollTrigger)
 import { SplitText } from './splitText.js'
 
 function InitFlickerWords(cls, dur) {
-    let text = new SplitText(cls);
-    let flickerEase = "rough({ template: circ.easeOut, strength: 4, points: 50, taper: 'out', randomize: true, clamp:  true})";
-    gsap.from(text.words, {
-        autoAlpha: 0,
-        duration: dur,
-        stagger: { each: 0.01, from: "random" },
-        ease: flickerEase,
-    });
+    cls.forEach((el) => {
+        let text = new SplitText(el);
+        let flickerEase = "rough({ template: circ.easeOut, strength: 4, points: 50, taper: 'out', randomize: true, clamp:  true})";
+        gsap.from(text.words, {
+            autoAlpha: 0,
+            duration: dur,
+            stagger: { each: 0.01, from: "random" },
+            ease: flickerEase,
+        });
+    })
 }
 
 function InitFlickerChar(cls, dur) {
-    let text = new SplitText(cls);
-    let flickerEase = "rough({ template: circ.easeOut, strength: 4, points: 50, taper: 'out', randomize: true, clamp:  true})";
-    gsap.from(text.chars, {
-        autoAlpha: 0,
-        duration: dur,
-        stagger: { each: 0.01, from: "random" },
-        ease: flickerEase
-    });
+    cls.forEach((el) => {
+        let text = new SplitText(el);
+        let flickerEase = "rough({ template: circ.easeOut, strength: 4, points: 50, taper: 'out', randomize: true, clamp:  true})";
+        gsap.from(text.chars, {
+            autoAlpha: 0,
+            duration: dur,
+            stagger: { each: 0.01, from: "random" },
+            ease: flickerEase
+        });
+    })
 }
 
 function InitFlickerInfinite(cls, dur) {
@@ -46,41 +50,6 @@ function isInView(element) {
         rect.bottom >= windowScrollY
     );
 }
-
-// TEXT DECODER EFFECT
-
-// function text_decode_effect(tag) {
-
-//     let elements = document.querySelectorAll(tag);
-//     Array.prototype.forEach.call(elements, function (element) {
-//         let decoding = false; // flag to track execution state
-
-//         function decodeText() {
-//             if (decoding) return; // exit if already decoding
-//             decoding = true;
-//             let t = element;
-//             let str = t.innerHTML;
-//             const ascii = "⏃⏚☊⎅⟒⎎☌⊑⟟⟊☍⌰⋔⋏⍜⌿⍾⍀⌇⏁⎍⎐⍙⌖⊬⋉"; let arr = str.split("");
-//             let newStr = "";
-
-//             setTimeout(function () {
-//                 for (let i = 0; i < arr.length; i++) {
-//                     let randomChar = ascii[Math.floor(Math.random() * ascii.length)];
-//                     newStr += randomChar;
-//                     t.innerHTML = newStr;
-//                     setTimeout(function () {
-//                         newStr = newStr.substring(0, i) + arr[i] + newStr.substring(i + 1);
-//                         t.innerHTML = newStr;
-//                         if (i === arr.length - 1) decoding = false; // reset flag when done
-//                     }, 90 * i);
-//                 }
-//             }, 100);
-//         }
-//         element.addEventListener('mouseover', decodeText);
-
-//     });
-
-// }
 
 function initMagneticButtons() {
 
@@ -372,4 +341,7 @@ window.onload = function () {
 
 initMagneticButtons();
 initMenu();
-InitFlickerWords('.desc', 1);
+const FlickerWords = document.querySelectorAll('.flickword');
+InitFlickerWords(FlickerWords, 1);
+const FlickerChars = document.querySelectorAll('.flickchar');
+InitFlickerChar(FlickerChars, 2);

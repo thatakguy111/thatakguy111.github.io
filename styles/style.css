@@ -2,6 +2,146 @@
 
 } */
 
+/* GlitchText Universal*/
+
+@keyframes glitchText {
+    0% {
+        opacity: 1;
+        transform: translate3d(-10px, 0, 0);
+        -webkit-clip-path: polygon(0 20%, 100% 20%, 100% 21%, 0 21%);
+        clip-path: polygon(0 20%, 100% 20%, 100% 21%, 0 21%);
+    }
+
+    10% {
+        -webkit-clip-path: polygon(0 33%, 100% 33%, 100% 33%, 0 33%);
+        clip-path: polygon(0 33%, 100% 33%, 100% 33%, 0 33%);
+    }
+
+    20% {
+        -webkit-clip-path: polygon(0 44%, 100% 44%, 100% 44%, 0 44%);
+        clip-path: polygon(0 44%, 100% 44%, 100% 44%, 0 44%);
+    }
+
+    35% {
+        -webkit-clip-path: polygon(0 50%, 100% 50%, 100% 20%, 0 20%);
+        clip-path: polygon(0 50%, 100% 50%, 100% 20%, 0 20%);
+    }
+
+    50% {
+        -webkit-clip-path: polygon(0 70%, 100% 70%, 100% 70%, 0 70%);
+        clip-path: polygon(0 70%, 100% 70%, 100% 70%, 0 70%);
+    }
+
+    60% {
+        -webkit-clip-path: polygon(0 80%, 100% 80%, 100% 80%, 0 80%);
+        clip-path: polygon(0 80%, 100% 80%, 100% 80%, 0 80%);
+    }
+
+    70% {
+        -webkit-clip-path: polygon(0 50%, 100% 50%, 100% 55%, 0 55%);
+        clip-path: polygon(0 50%, 100% 50%, 100% 55%, 0 55%);
+    }
+
+    80% {
+        -webkit-clip-path: polygon(0 70%, 100% 70%, 100% 80%, 0 80%);
+        clip-path: polygon(0 70%, 100% 70%, 100% 80%, 0 80%);
+    }
+
+    90% {
+        transform: translate3d(-10px, 0, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateZ(0) scaleZ(1);
+        -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+    }
+}
+
+@keyframes glitchLine {
+    0% {
+        transform: scaleZ(1);
+    }
+
+    10% {
+        transform: translate3d(10px, 0, 0);
+    }
+
+    20% {
+        transform: translate3d(0, 4px, 0);
+    }
+
+    30% {
+        transform: scale3d(.1, 1.4, 1) translate3d(0, -25px, 0);
+        transform-origin: 100% 0%;
+    }
+
+    40% {
+        transform: scale3d(1, .3, 1) translate3d(0, 25px, 0);
+    }
+
+    50% {
+        transform: scale3d(.5, .3, 1) translate3d(-100px, -80px, 0);
+    }
+
+    60% {
+        transform: scale3d(1, 1.25, 1) translate3d(10px, -5px, 0);
+    }
+
+    70% {
+        transform: scale3d(.5, .5, 1) translate3d(0, 20px, 0);
+    }
+
+    80% {
+        transform: translate3d(-30px, 10px, 0) scale3d(1, .4, 1);
+        transform-origin: 100% 0%;
+    }
+
+    90% {
+        transform: scale3d(1, .5, 1) translate3d(0, -15px, 0);
+        transform-origin: 0% 50%;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.glitch {
+    color: #919191;
+    text-decoration: inherit;
+    position: relative;
+    white-space: nowrap;
+    cursor: pointer;
+    width: fit-content;
+    overflow: hidden;
+}
+
+.glitch:hover>span {
+    animation: glitchText .4s linear;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .glitch:before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 1px;
+        background: currentColor;
+        top: 100%;
+        left: 0;
+        pointer-events: none;
+        opacity: 0;
+    }
+
+    .glitch:hover:before {
+        opacity: 1;
+        animation: glitchLine .4s steps(2, start) forwards;
+    }
+}
+
+/* ------------------------------------------------ENDS------------------------------------------- */
 
 /* Magnetic Buttons Universal */
 
@@ -144,8 +284,8 @@ img {
 }
 
 header {
-    height: 720px;
-    background-color: rgb(0, 0, 0,0.5);
+    height: 750px;
+    background-color: rgb(0, 0, 0, 0.5);
 }
 
 /* Navigation Bar Styles */
@@ -167,7 +307,7 @@ nav #logo {
 nav ul {
     font-family: Private-2;
     font-size: 18px;
-    letter-spacing: -1.3px;
+    letter-spacing: -1px;
     display: flex;
     justify-content: end;
     align-items: center;
@@ -274,7 +414,7 @@ nav ul li .btn-text {
     color: #8c8c8c;
 }
 
-.profile .desc {
+.profile>div:last-child>div:nth-child(2) {
     height: 200px;
     text-wrap: wrap;
     width: 200px;
