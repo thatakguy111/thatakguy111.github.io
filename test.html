@@ -16,256 +16,63 @@
             font-family: Arial, sans-serif;
         }
 
-        .aki__char {
-            color: azure;
+        .text{
+            width: 200px;
+            color: white;
+            text-wrap: nowrap;
         }
     </style>
 </head>
 
 <body>
-    <span class="text">
-        This is me. I am doing great
-    </span>
+    <span class="text">This is me. I'm doing great</span>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
     <script>
-        class SplitText {
-            #options = {
-                charClass: "aki__char",
-                wordClass: "aki__word",
-                lineClass: "aki__line",
-                globalClass: "aki_wrapper",
-                emptySpaceName: "__AKI__EMPTY__SPACE__",
-            };
+        // Function to initialize the typewriting animation
+        function initTypewritingAnimation(selector) {
+            const duration = 0.09;
+            const delay = 0;
+            const lettersAndSymbols = ["A", "B", "C", "1", "2", "3"]; // Example array
+            const textElement = document.querySelector(selector);
 
-            #rawChars = [];
-            chars = [];
-            #rawWords = [];
-            words = [];
-            lines = [];
-            target = null;
-            textContent = null;
+            if (!textElement) return;
 
-            constructor(elementOrSelector) {
-                this.init(elementOrSelector);
-            }
-
-            #isElement(obj) {
-                return obj instanceof HTMLElement;
-            }
-
-            #createElement(tagname, content = "", htmlAttributes = {}, ...cssClass) {
-                const element = document.createElement(tagname);
-                element.classList.add(...cssClass);
-                element.innerHTML = content;
-
-                for (const [key, value] of Object.entries(htmlAttributes)) {
-                    element.setAttribute(key, value);
-                }
-
-                return element;
-            }
-
-            #splitChars() {
-                const textChars = [...this.textContent];
-
-                textChars.forEach((char) => {
-                    const charElement = this.#createElement(
-                        "span",
-                        char,
-                        {},
-                        this.#options.charClass
-                    );
-
-                    if (char === " ") {
-                        this.#rawChars.push(" ");
-                    } else {
-                        this.#rawChars.push(charElement);
-                        this.chars.push(charElement);
-                    }
-                });
-            }
-
-            #splitWords() {
-                let startIndex = 0;
-                this.#rawChars.forEach((rawChar, index) => {
-                    if (rawChar === " ") {
-                        const wordArray = this.#rawChars.slice(startIndex, index).filter((char) => char !== " ");
-
-                        const wordSpan = this.#createElement(
-                            "span",
-                            "",
-                            {},
-                            this.#options.wordClass
-                        );
-
-                        wordArray.forEach((char) => wordSpan.append(char));
-
-                        this.words.push(wordSpan);
-                        this.#rawWords.push(wordSpan, " ");
-                        startIndex = index + 1;
-                    }
-                });
-
-                const wordArray = this.#rawChars.slice(startIndex).filter((char) => char !== " ");
-                if (wordArray.length) {
-                    const wordSpan = this.#createElement(
-                        "span",
-                        "",
-                        {},
-                        this.#options.wordClass
-                    );
-
-                    wordArray.forEach((char) => wordSpan.append(char));
-                    this.words.push(wordSpan);
-                    this.#rawWords.push(wordSpan, " ");
-                }
-            }
-
-            #splitLines() {
-                const lineArrays = [];
-                let startIndex = 0;
-
-                this.words.reduce((prevOffsetTop, word, index) => {
-                    const currentOffsetTop = word.offsetTop;
-
-                    if (prevOffsetTop !== currentOffsetTop && prevOffsetTop !== null) {
-                        const lineArray = this.words.slice(startIndex, index);
-                        lineArrays.push(lineArray);
-                        startIndex = index;
-                    }
-
-                    if (index === this.words.length - 1) {
-                        const lineArray = this.words.slice(startIndex, index + 1);
-                        lineArrays.push(lineArray);
-                    }
-
-                    return currentOffsetTop;
-                }, null);
-
-                this.#appendLines(lineArrays);
-            }
-
-            #appendLines(lineArrays) {
-                lineArrays.forEach((lineArray) => {
-                    const lineSpan = this.#createElement(
-                        "span",
-                        "",
-                        {},
-                        this.#options.lineClass
-                    );
-
-                    lineArray.forEach((word) => {
-                        lineSpan.append(word);
-                        lineSpan.append(" ");
-                    });
-
-                    this.lines.push(lineSpan);
-                    this.target.append(lineSpan);
-                });
-            }
-
-            #combineAll() {
-                this.words.forEach((word) => {
-                    this.target.append(word);
-                    this.target.append(" ");
-                });
-                this.#splitLines();
-            }
-
-            #splitStart() {
-                this.#splitChars();
-                this.#splitWords();
-                this.#combineAll();
-            }
-
-            #getTextContent() {
-                this.textContent = this.target.textContent;
-            }
-
-            #clearContent(element) {
-                element.innerHTML = "";
-            }
-
-            #logError(message) {
-                console.error(message);
-            }
-
-            #logAndThrowError(message) {
-                this.#logError(message);
-                throw new Error("SplitTextException: " + message);
-            }
-
-            init(elementOrSelector) {
-                if (this.#isElement(elementOrSelector)) {
-                    this.target = elementOrSelector;
-                    this.#getTextContent();
-                } else {
-                    const element = document.querySelector(elementOrSelector);
-                    if (element) {
-                        this.target = element;
-                        this.#getTextContent();
-                    } else {
-                        this.#logAndThrowError(`Cannot find element with selector "${elementOrSelector}" in DOM tree!`);
-                    }
-                }
-
-                this.#clearContent(this.target);
-                this.#splitStart();
-            }
-        }
-
-        // Usage example
-        const textElement = document.querySelector(".text");
-        const splitText = new SplitText(textElement);
-
-        // Define the function
-        function initTypewritingAnimation(timeline, text, options = {}, lettersAndSymbols) {
-            const { duration = 0.08, delay = 0 } = options;
-            const chars = text.querySelectorAll(".aki__char");
+            const textContent = textElement.textContent;
+            textElement.innerHTML = textContent.split('').map(char => `<span class="char">${char}</span>`).join('');
+            const chars = textElement.querySelectorAll(".char");
 
             chars.forEach((char, position) => {
-                const initialHTML = char.innerHTML;
+                const initialText = char.textContent;
 
-                timeline.fromTo(
+                if (initialText === " ") {
+                    return; // Skip the animation for spaces
+                }
+
+                gsap.fromTo(
                     char,
                     { opacity: 0 },
                     {
                         duration: 0.03,
-                        innerHTML: () =>
-                            lettersAndSymbols[
-                            Math.floor(Math.random() * lettersAndSymbols.length)
-                            ],
+                        onUpdate: () => {
+                            char.textContent = lettersAndSymbols[
+                                Math.floor(Math.random() * lettersAndSymbols.length)
+                            ];
+                        },
                         repeat: 1,
                         repeatRefresh: true,
                         opacity: 1,
                         repeatDelay: 0.03,
                         onComplete: () => {
-                            gsap.set(char, { innerHTML: initialHTML, delay: 0.03 });
+                            char.textContent = initialText;
                         },
-                    },
-                    (position + 1) * duration + delay
+                        delay: (position + 1) * duration + delay
+                    }
                 );
             });
-
-            if (text.hasAttribute("data-triangle")) {
-                timeline.to(
-                    text,
-                    {
-                        "--triangle-opacity": 1,
-                        duration: 1,
-                    },
-                    (chars.length + 2) * duration
-                );
-            }
         }
 
-        // Define GSAP timeline and options
-        const timeline = gsap.timeline();
-        const lettersAndSymbols = ["A", "B", "C", "1", "2", "3"]; // Example array
-        const options = { duration: 0.1, delay: 0.5 };
-
-        // Initialize the typewriting animation
-        initTypewritingAnimation(timeline, textElement, options, lettersAndSymbols);
+        // Usage example
+        initTypewritingAnimation(".text");
     </script>
 </body>
 

@@ -2,8 +2,11 @@ gsap.registerPlugin(EasePack)
 gsap.registerPlugin(ScrollTrigger)
 import { SplitText } from './splitText.js'
 
+const MasterTimeline = gsap.timeline({ repeatDelay: 1 });
+
 function InitFlickerWords(cls, dur) {
     cls.forEach((el) => {
+        el.classList.toggle('visible')
         let text = new SplitText(el);
         let flickerEase = "rough({ template: circ.easeOut, strength: 4, points: 50, taper: 'out', randomize: true, clamp:  true})";
         gsap.from(text.words, {
@@ -12,17 +15,19 @@ function InitFlickerWords(cls, dur) {
             stagger: { each: 0.01, from: "random" },
             ease: flickerEase,
         });
+
     })
 }
 
 function InitFlickerChar(cls, dur) {
     cls.forEach((el) => {
+        el.classList.toggle('visible')
         let text = new SplitText(el);
         let flickerEase = "rough({ template: circ.easeOut, strength: 4, points: 50, taper: 'out', randomize: true, clamp:  true})";
         gsap.from(text.chars, {
             autoAlpha: 0,
             duration: dur,
-            stagger: { each: 0.01, from: "random" },
+            stagger: { each: 0.05, from: "random" },
             ease: flickerEase
         });
     })
@@ -142,7 +147,55 @@ function initMagneticButtons() {
     });
 }
 
-function initMenu() {
+function InitTypeWriter(selector) {
+    const duration = 0.17;
+    const lettersAndSymbols = ["A", "B", "C", "1", "2", "3"];
+    const textElements = document.querySelectorAll(selector);
+
+    if (textElements.length === 0) return;
+
+    textElements.forEach(textElement => {
+        const textContent = textElement.textContent.trim();
+        textElement.innerHTML = textContent.split('').map(char => {
+            if (char === ' ') {
+                return ' ';
+            }
+            return `<span class="char">${char}</span>`;
+        }).join('');
+
+        const chars = textElement.querySelectorAll(".char");
+
+        const animations = Array.from(chars).map((char, position) => {
+            const initialText = char.textContent;
+
+            return gsap.fromTo(
+                char,
+                { opacity: 0 },
+                {
+                    duration: 0.06,
+                    onUpdate: () => {
+                        char.textContent = lettersAndSymbols[Math.floor(Math.random() * lettersAndSymbols.length)];
+                    },
+                    repeat: 1,
+                    repeatRefresh: true,
+                    opacity: 1,
+                    repeatDelay: 0,
+                    onComplete: () => {
+                        char.textContent = initialText;
+                    },
+                    delay: position * duration
+                }
+            );
+        });
+
+        gsap.timeline().add(animations).add(() => {
+            // Restore the original text content after the animation
+            textElement.textContent = textContent;
+        });
+    });
+}
+
+function InitMenu() {
 
     const container = document.querySelector('.content-container');
     const nav = document.querySelector('nav');
@@ -267,19 +320,6 @@ function initMenu() {
     btn.addEventListener('click', initMenuButton);
 }
 
-function InitProfile() {
-    const profile = document.querySelector('.profile');
-    const el = profile.querySelector('.desc');
-
-    gsap.to(el, {
-        opacity: 1,
-        duration: 1,
-        ease: "elastic.inOut(1,0.3)",
-    });
-
-}
-
-
 // INTRO AND LOADING SCREEN
 
 window.onload = function () {
@@ -339,9 +379,21 @@ window.onload = function () {
 
 // CALL FUNCTIONS
 
-initMagneticButtons();
-initMenu();
-const FlickerWords = document.querySelectorAll('.flickword');
-InitFlickerWords(FlickerWords, 1);
-const FlickerChars = document.querySelectorAll('.flickchar');
-InitFlickerChar(FlickerChars, 2);
+function InitFirstLoad() {
+
+    const FlickerWords = document.querySelectorAll('.flickword');
+
+    const FlickerChars = document.querySelectorAll('.flickchar');
+
+    MasterTimeline.add(() => InitTypeWriter('.decode'));
+    MasterTimeline.add(() => InitFlickerWords(FlickerWords, 1), 0.5);
+    MasterTimeline.add(() => InitFlickerChar(FlickerChars, 2), 0.5);
+    MasterTimeline.add(() => initMagneticButtons());
+
+    // initMenu();
+}
+
+
+window.onload = function () {
+    InitFirstLoad();
+};
